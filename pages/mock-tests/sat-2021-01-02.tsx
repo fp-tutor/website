@@ -1,10 +1,21 @@
-import { useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import { BaseSyntheticEvent } from 'react'
 import range from '../../utils/utils'
 
-const MultipleChoiceQuestion = ({ section, num }) => {
+interface MultipleChoiceQuestionProps {
+  section: 'R' | 'W' | 'M',
+  num: number
+}
+
+interface PassageProps {
+  section: 'R' | 'W' | 'M',
+  num: number,
+  first: number,
+  last: number
+}
+
+const MultipleChoiceQuestion = ({ section, num }: MultipleChoiceQuestionProps) => {
   const keys = ['A', 'B', 'C', 'D']
-  const ans_list = keys.map((k, i) => {
+  const ans_list = keys.map((k) => {
     const id = `${section}.${num}.${k}`
     return (
       <div className="flex flex-col content-center" key={`${section}.Q${k}`}>
@@ -31,7 +42,7 @@ const MultipleChoiceQuestion = ({ section, num }) => {
   )
 }
 
-const Passage = ({ section, num, first, last }) => {
+const Passage = ({ section, num, first, last }: PassageProps) => {
   const questions = range(first, last + 1, 1).map((i) => (
     <MultipleChoiceQuestion section={section} num={i} key={`${num}.${i}`} />
   ))
@@ -44,20 +55,24 @@ const Passage = ({ section, num, first, last }) => {
 }
 
 export default function MockTest() {
-  const submitForm = async event => {
+  const submitForm = async (event: BaseSyntheticEvent) => {
     event.preventDefault()
 
-    const questions: string[] = range(1, 53, 1).map(i => `R.${i}`).concat(range(1, 44, 1).map(i => `W.${i}`))
-    const answers = Object.fromEntries(questions.map(q => [q, event.target[q].value]))
+    const questions: string[] = range(1, 53, 1)
+      .map((i) => `R.${i}`)
+      .concat(range(1, 44, 1).map((i) => `W.${i}`))
+    const answers = Object.fromEntries(
+      questions.map((q) => [q, event.target[q].value])
+    )
     const form = {
-      "Họ và tên": event.target.fullname.value,
-      "Email": event.target.email.value,
-      ...answers
+      'Họ và tên': event.target.fullname.value,
+      Email: event.target.email.value,
+      ...answers,
     }
 
     const body = {
       id: 1,
-      form: form
+      form: form,
     }
 
     console.log(body)
@@ -65,9 +80,9 @@ export default function MockTest() {
     const res = await fetch('/api/submit', {
       body: JSON.stringify(body),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      method: 'POST'
+      method: 'POST',
     })
     const result = await res.json()
     console.log(result)
@@ -75,10 +90,22 @@ export default function MockTest() {
   const start_nums = [1, 11, 21, 32, 42]
   const starts = [...start_nums, 53]
   const r_passages = [1, 2, 3, 4, 5].map((p) => (
-    <Passage key={`R.${p}`} section="R" num={p} first={starts[p - 1]} last={starts[p]-1} />
+    <Passage
+      key={`R.${p}`}
+      section="R"
+      num={p}
+      first={starts[p - 1]}
+      last={starts[p] - 1}
+    />
   ))
   const w_passages = [1, 2, 3, 4].map((p) => (
-    <Passage key={`W.${p}`} section="W" num={p} first={p*11 - 10} last={p*11} />
+    <Passage
+      key={`W.${p}`}
+      section="W"
+      num={p}
+      first={p * 11 - 10}
+      last={p * 11}
+    />
   ))
   return (
     <>
@@ -107,10 +134,14 @@ export default function MockTest() {
           />
         </div>
         <h2>Reading</h2>
-        <div className="flex flex-row flex-wrap justify-around">{r_passages}</div>
+        <div className="flex flex-row flex-wrap justify-around">
+          {r_passages}
+        </div>
         <h2>Writing</h2>
-        <div className="flex flex-row flex-wrap justify-around">{w_passages}</div>
-        <button type='submit'>Nộp bài</button>
+        <div className="flex flex-row flex-wrap justify-around">
+          {w_passages}
+        </div>
+        <button type="submit">Nộp bài</button>
       </form>
     </>
   )
