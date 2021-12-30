@@ -1,19 +1,36 @@
 import { BaseSyntheticEvent } from 'react'
-import range from '../../utils/utils'
+import range from '../utils/utils'
+import Layout from '../components/layout'
+import Head from 'next/head'
+
+type Section = 'R' | 'W' | 'M(NC)' | 'M(CA)'
 
 interface MultipleChoiceQuestionProps {
-  section: 'R' | 'W' | 'M',
+  section: Section
   num: number
 }
 
 interface PassageProps {
-  section: 'R' | 'W' | 'M',
-  num: number,
-  first: number,
+  section: 'R' | 'W'
+  num: number
+  first: number
   last: number
 }
 
-const MultipleChoiceQuestion = ({ section, num }: MultipleChoiceQuestionProps) => {
+interface ReadingSectionProps {
+  starts: number[]
+}
+
+interface MockTestProps {
+  id: number
+  reading: number[]
+  has_writing: boolean
+}
+
+const MultipleChoiceQuestion = ({
+  section,
+  num,
+}: MultipleChoiceQuestionProps) => {
   const keys = ['A', 'B', 'C', 'D']
   const ans_list = keys.map((k) => {
     const id = `${section}.${num}.${k}`
@@ -54,27 +71,64 @@ const Passage = ({ section, num, first, last }: PassageProps) => {
   )
 }
 
-export default function MockTest() {
+const ReadingSection = ({ starts }: ReadingSectionProps) => {
+  const r_starts = [...starts, 53]
+  const passages = [1, 2, 3, 4, 5].map((p) => (
+    <Passage
+      key={`R.${p}`}
+      section="R"
+      num={p}
+      first={r_starts[p - 1]}
+      last={r_starts[p] - 1}
+    />
+  ))
+  return (
+    <div>
+      <h2>Reading</h2>
+      <div className="flex flex-row flex-wrap justify-around">{passages}</div>
+    </div>
+  )
+}
+
+const WritingSection = () => {
+  const passages = [1, 2, 3, 4].map((p) => (
+    <Passage
+      key={`R.${p}`}
+      section="R"
+      num={p}
+      first={p * 11 - 10}
+      last={p * 11}
+    />
+  ))
+  return (
+    <div>
+      <h2>Writing</h2>
+      <div className="flex flex-row flex-wrap justify-around">{passages}</div>
+    </div>
+  )
+}
+
+export default function MockTest({ id, reading, has_writing }: MockTestProps) {
+  const questions = range(1, 53, 1)
+    .map((q) => `R.${q}`)
+    .concat(range(1, 45, 1).map((q) => `W.${q}`))
   const submitForm = async (event: BaseSyntheticEvent) => {
     event.preventDefault()
 
-    const questions: string[] = range(1, 53, 1)
-      .map((i) => `R.${i}`)
-      .concat(range(1, 44, 1).map((i) => `W.${i}`))
     const answers = Object.fromEntries(
-      questions.map((q) => [q, event.target[q].value])
+      questions
+        .filter((q) => event.target[q] !== undefined)
+        .map((q) => [q, event.target[q].value])
     )
-    const form = {
-      'Họ và tên': event.target.fullname.value,
-      Email: event.target.email.value,
-      ...answers,
-    }
 
     const body = {
-      id: 1,
-      form: form,
+      id: id,
+      form: {
+        'Họ và tên': event.target.fullname.value,
+        Email: event.target.email.value,
+        ...answers,
+      },
     }
-
     console.log(body)
 
     const res = await fetch('/api/submit', {
@@ -87,29 +141,12 @@ export default function MockTest() {
     const result = await res.json()
     console.log(result)
   }
-  const start_nums = [1, 11, 21, 32, 42]
-  const starts = [...start_nums, 53]
-  const r_passages = [1, 2, 3, 4, 5].map((p) => (
-    <Passage
-      key={`R.${p}`}
-      section="R"
-      num={p}
-      first={starts[p - 1]}
-      last={starts[p] - 1}
-    />
-  ))
-  const w_passages = [1, 2, 3, 4].map((p) => (
-    <Passage
-      key={`W.${p}`}
-      section="W"
-      num={p}
-      first={p * 11 - 10}
-      last={p * 11}
-    />
-  ))
+
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Mock Test SAT 1</h1>
+    <Layout>
+      <Head>
+        <title>SAT Mock Test</title>
+      </Head>
       <form onSubmit={submitForm}>
         <h2>Thông tin</h2>
         <div>
@@ -133,16 +170,10 @@ export default function MockTest() {
             className="border-2"
           />
         </div>
-        <h2>Reading</h2>
-        <div className="flex flex-row flex-wrap justify-around">
-          {r_passages}
-        </div>
-        <h2>Writing</h2>
-        <div className="flex flex-row flex-wrap justify-around">
-          {w_passages}
-        </div>
+        {reading.length > 0 ? <ReadingSection starts={reading} /> : null}
+        {has_writing ? <WritingSection /> : null}
         <button type="submit">Nộp bài</button>
       </form>
-    </>
+    </Layout>
   )
 }
