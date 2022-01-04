@@ -13,7 +13,7 @@ export async function getStaticProps() {
   }
 }
 
-const MockTestsPage: NextPage = ({ allPostsData }) => {
+const MockTestPage: NextPage = ({ allPostsData }) => {
   return (
     <Layout>
       <Head>
@@ -37,4 +37,4 @@ const MockTestsPage: NextPage = ({ allPostsData }) => {
   )
 }
 
-export default MockTestsPage
+export default MockTestPage
