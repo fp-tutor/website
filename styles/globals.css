@@ -18,3 +18,9 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@layer base {
+  h2 {
+    @apply text-xl font-bold mt-6 mb-2;
+  }
+}

@@ -8,7 +8,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Future Perfect</title>
       </Head>
-      <p>Hello there</p>
+      <h1 className="text-6xl font-bold text-center my-auto">Future Perfect</h1>
     </Layout>
   )
 }

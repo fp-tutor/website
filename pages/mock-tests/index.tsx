@@ -1,0 +1,40 @@
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Layout from '../../components/layout'
+import Link from 'next/link'
+import { getSortedPostsData } from '../../lib/posts'
+
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+
+const MockTestsPage: NextPage = ({ allPostsData }) => {
+  return (
+    <Layout>
+      <Head>
+        <title>Mock Tests | Future Perfect</title>
+      </Head>
+      <section className="max-w-4xl lg:w-[48rem]">
+        <h1 className="text-4xl font-bold pt-12 pb-4">Mock Tests</h1>
+        <ul>
+          {allPostsData.map(({ id, title, date }) => (
+            <li key={id} className="py-4">
+              <Link href={`/mock-tests/${id}`}>
+                <a href={`/mock-tests/${id}`} className="text-xl text-sky-500 font-bold">{title}</a>
+              </Link>
+              <br />
+              <span>{date}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </Layout>
+  )
+}
+
+export default MockTestsPage

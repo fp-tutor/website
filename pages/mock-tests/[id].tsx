@@ -1,9 +1,30 @@
+import Head from 'next/head'
 import Layout from '../../components/layout'
-import MockTest from '../../components/mock-test'
+import { MockTest, MockTestProps } from '../../components/mock-test'
 import { getAllPostIds, getPostData } from '../../lib/posts'
 
-export default function Post({ postData }) {
-  return <MockTest {...postData} />
+interface PostData {
+  title: string,
+  date: string,
+  test_data: MockTestProps
+}
+
+export default function Post({ postData }: { postData: PostData} ) {
+  const title = postData.title
+  const date = postData.date
+  const test_data = postData.test_data
+  return (
+    <Layout>
+      <Head>
+        <title>{`${title} | Future Perfect`}</title>
+      </Head>
+      <article className="max-w-5xl m-4">
+        <h1 className="text-3xl font-bold my-4">{title}</h1>
+        <time dateTime={date}>{date}</time>
+        <MockTest {...test_data} />
+      </article>
+    </Layout>
+  )
 }
 
 export async function getStaticPaths() {
