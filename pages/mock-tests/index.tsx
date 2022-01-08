@@ -8,8 +8,8 @@ export async function getStaticProps() {
   const allPostsData = getSortedPostsData()
   return {
     props: {
-      allPostsData
-    }
+      allPostsData,
+    },
   }
 }
 
@@ -19,13 +19,18 @@ const MockTestPage: NextPage = ({ allPostsData }) => {
       <Head>
         <title>Mock Tests | Future Perfect</title>
       </Head>
-      <section className="max-w-4xl lg:w-[48rem]">
+      <section>
         <h1 className="text-4xl font-bold pt-12 pb-4">Mock Tests</h1>
         <ul>
           {allPostsData.map(({ id, title, date }) => (
             <li key={id} className="py-4">
               <Link href={`/mock-tests/${id}`}>
-                <a href={`/mock-tests/${id}`} className="text-xl text-sky-500 font-bold">{title}</a>
+                <a
+                  href={`/mock-tests/${id}`}
+                  className="text-xl text-sky-500 font-bold hover:underline hover:decoration-dashed hover:underline-offset-4"
+                >
+                  {title}
+                </a>
               </Link>
               <br />
               <span>{date}</span>

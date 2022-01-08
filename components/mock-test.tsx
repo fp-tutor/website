@@ -43,7 +43,7 @@ const MultipleChoiceQuestion = ({
           name={`${section}.${num}`}
           value={k}
           id={id}
-          className="appearance-none w-4 h-4 rounded-full border dark:border-zinc-500 dark:bg-zinc-700 dark:checked:border-4 dark:checked:border-amber-400"
+          className="appearance-none w-4 h-4 rounded-full bg-zinc-50 border border-zinc-400 checked:bg-amber-400 checked:border-amber-400"
         />
       </div>
     )
@@ -63,7 +63,10 @@ const Passage = ({ section, num, first, last }: PassageProps) => {
     <MultipleChoiceQuestion section={section} num={i} key={`${num}.${i}`} />
   ))
   return (
-    <fieldset key={`${section}.Passage ${num}`} className="m-2 border-2 dark:border-zinc-500 p-2 rounded-md">
+    <fieldset
+      key={`${section}.Passage ${num}`}
+      className="m-2 border-2 border-zinc-200 p-2 rounded-md"
+    >
       <legend className="font-bold">Passage {num}</legend>
       {questions}
     </fieldset>
@@ -84,7 +87,7 @@ const ReadingSection = ({ starts }: ReadingSectionProps) => {
   return (
     <section>
       <h2>Reading</h2>
-      <div className="flex flex-row flex-wrap justify-around">{passages}</div>
+      <div className="flex flex-row flex-wrap justify-evenly">{passages}</div>
     </section>
   )
 }
@@ -102,7 +105,7 @@ const WritingSection = () => {
   return (
     <section>
       <h2>Writing</h2>
-      <div className="flex flex-row flex-wrap justify-around">{passages}</div>
+      <div className="flex flex-row flex-wrap justify-evenly">{passages}</div>
     </section>
   )
 }
@@ -150,31 +153,40 @@ export function MockTest({ index, reading, has_writing }: MockTestProps) {
         <section>
           <h2>Thông tin</h2>
           <div className="mb-4">
-            <label htmlFor="fullname" className="block mb-2">Họ và tên</label>
+            <label htmlFor="fullname" className="block mb-2">
+              Họ và tên
+            </label>
             <input
               type="text"
               id="fullname"
               name="fullname"
               size={20}
               required
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-sm focus:ring-amber-400 focus:border-amber-500 block w-full p-2 dark:bg-zinc-700 dark:border-zinc-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-amber-400"
+              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block mb-2">Email</label>
+            <label htmlFor="email" className="block mb-2">
+              Email
+            </label>
             <input
               type="email"
               id="email"
               name="email"
               size={20}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-sm focus:ring-amber-400 focus:border-amber-500 block w-full p-2 dark:bg-zinc-700 dark:border-zinc-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-amber-400"
+              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-0 focus:ring focus:ring-amber-400"
             />
           </div>
         </section>
         {reading.length > 0 ? <ReadingSection starts={reading} /> : null}
         {has_writing ? <WritingSection /> : null}
-        <div>
-          <button type="submit" className="container my-4 bg-amber-400 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-bold rounded px-5 py-2 text-center dark:focus:ring-amber-900">Nộp bài</button>
+        <div className="flex flex-row justify-center">
+          <button
+            type="submit"
+            className="my-4 bg-yellow-400 border-2 border-yellow-400 hover:bg-zinc-50 font-bold rounded px-4 py-2 text-center"
+          >
+            NỘP BÀI
+          </button>
         </div>
       </form>
     </section>
