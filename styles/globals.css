@@ -6,6 +6,6 @@
 
 @layer base {
   h2 {
-    @apply text-xl font-bold mt-6 mb-2;
+    @apply text-xl font-bold;
   }
 }

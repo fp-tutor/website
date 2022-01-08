@@ -1,28 +1,12 @@
-import Head from 'next/head'
 import Layout from '../../components/layout'
-import { MockTest, MockTestProps } from '../../components/mock-test'
+import { TestPost } from '../../components/mock-test'
+import { Post } from '../../lib/types/post'
 import { getAllPostIds, getPostData } from '../../lib/posts'
 
-interface PostData {
-  title: string
-  date: string
-  test_data: MockTestProps
-}
-
-export default function Post({ postData }: { postData: PostData }) {
-  const title = postData.title
-  const date = postData.date
-  const test_data = postData.test_data
+export default function PostView({ postData }: { postData: Post }) {
   return (
     <Layout>
-      <Head>
-        <title>{`${title} | Future Perfect`}</title>
-      </Head>
-      <article>
-        <h1 className="text-3xl font-bold mt-8">{title}</h1>
-        <time dateTime={date}>{date}</time>
-        <MockTest {...test_data} />
-      </article>
+      <TestPost {...postData} />
     </Layout>
   )
 }

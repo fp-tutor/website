@@ -1,6 +1,7 @@
 import { BaseSyntheticEvent } from 'react'
 import range from '../lib/utils'
 import Head from 'next/head'
+import { Post } from '../lib/types/post'
 
 type Section = 'R' | 'W' | 'M(NC)' | 'M(CA)'
 
@@ -18,12 +19,6 @@ interface PassageProps {
 
 interface ReadingSectionProps {
   starts: number[]
-}
-
-export interface MockTestProps {
-  index: number
-  reading: number[]
-  has_writing: boolean
 }
 
 const MultipleChoiceQuestion = ({
@@ -110,7 +105,7 @@ const WritingSection = () => {
   )
 }
 
-export function MockTest({ index, reading, has_writing }: MockTestProps) {
+export function TestPost({ title, date, data }: Post) {
   const questions = range(1, 53, 1)
     .map((q) => `R.${q}`)
     .concat(range(1, 45, 1).map((q) => `W.${q}`))
@@ -124,7 +119,7 @@ export function MockTest({ index, reading, has_writing }: MockTestProps) {
     )
 
     const body = {
-      id: index,
+      id: data.index,
       form: {
         'Họ và tên': event.target.fullname.value,
         Email: event.target.email.value,
@@ -145,50 +140,72 @@ export function MockTest({ index, reading, has_writing }: MockTestProps) {
   }
 
   return (
-    <section>
+    <article className="space-y-4">
       <Head>
-        <title>SAT Mock Test</title>
+        <title>{`${title} | Future Perfect`}</title>
       </Head>
-      <form onSubmit={submitForm} className="flex flex-col items-stretch">
-        <section>
-          <h2>Thông tin</h2>
-          <div className="mb-4">
-            <label htmlFor="fullname" className="block mb-2">
-              Họ và tên
-            </label>
-            <input
-              type="text"
-              id="fullname"
-              name="fullname"
-              size={20}
-              required
-              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
-            />
+      <h1 className="text-3xl font-bold mt-8">{title}</h1>
+      <time dateTime={date}>{date}</time>
+      <section>
+        <form
+          onSubmit={submitForm}
+          className="flex flex-col items-stretch space-y-4"
+        >
+          <section className="space-y-2">
+            <h2>Thông tin</h2>
+            <div>
+              <label htmlFor="fullname" className="block">
+                Họ và tên
+              </label>
+              <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                size={20}
+                required
+                className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                size={20}
+                className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
+              />
+            </div>
+          </section>
+          <section className="space-y-2">
+            <h2>Đề bài</h2>
+            <p>
+              Link đề bài:{' '}
+              <a
+                href={data.source}
+                target="_blank"
+                className="text-sky-500 hover:underline hover:decoration-dashed hover:underline-offset-4"
+              >
+                {title}
+              </a>
+            </p>
+          </section>
+          {data.reading.length > 0 ? (
+            <ReadingSection starts={data.reading} />
+          ) : null}
+          {data.has_writing ? <WritingSection /> : null}
+          <div className="flex flex-row justify-center">
+            <button
+              type="submit"
+              className="my-4 bg-yellow-400 border-2 border-yellow-400 hover:bg-zinc-50 font-bold rounded px-4 py-2 text-center"
+            >
+              NỘP BÀI
+            </button>
           </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              size={20}
-              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
-            />
-          </div>
-        </section>
-        {reading.length > 0 ? <ReadingSection starts={reading} /> : null}
-        {has_writing ? <WritingSection /> : null}
-        <div className="flex flex-row justify-center">
-          <button
-            type="submit"
-            className="my-4 bg-yellow-400 border-2 border-yellow-400 hover:bg-zinc-50 font-bold rounded px-4 py-2 text-center"
-          >
-            NỘP BÀI
-          </button>
-        </div>
-      </form>
-    </section>
+        </form>
+      </section>
+    </article>
   )
 }
