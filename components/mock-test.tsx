@@ -38,6 +38,7 @@ const MultipleChoiceQuestion = ({
           name={`${section}.${num}`}
           value={k}
           id={id}
+          form="test-form"
           className="appearance-none w-4 h-4 rounded-full bg-zinc-50 border border-zinc-400 checked:bg-amber-400 checked:border-amber-400"
         />
       </div>
@@ -60,7 +61,7 @@ const Passage = ({ section, num, first, last }: PassageProps) => {
   return (
     <fieldset
       key={`${section}.Passage ${num}`}
-      className="m-2 border-2 border-zinc-200 p-2 rounded-md"
+      className="my-2 border-2 border-zinc-200 p-2 rounded-md"
     >
       <legend className="font-bold">Passage {num}</legend>
       {questions}
@@ -90,15 +91,15 @@ const ReadingSection = ({ starts }: ReadingSectionProps) => {
 const WritingSection = () => {
   const passages = [1, 2, 3, 4].map((p) => (
     <Passage
-      key={`R.${p}`}
-      section="R"
+      key={`W.${p}`}
+      section="W"
       num={p}
       first={p * 11 - 10}
       last={p * 11}
     />
   ))
   return (
-    <section>
+    <section className="space-y-2">
       <h2>Writing</h2>
       <div className="flex flex-row flex-wrap justify-evenly">{passages}</div>
     </section>
@@ -146,65 +147,64 @@ export function TestPost({ title, date, data }: Post) {
       </Head>
       <h1 className="text-3xl font-bold mt-8">{title}</h1>
       <time dateTime={date}>{date}</time>
-      <section>
-        <form
-          onSubmit={submitForm}
-          className="flex flex-col items-stretch space-y-4"
-        >
-          <section className="space-y-2">
-            <h2>Thông tin</h2>
-            <div>
-              <label htmlFor="fullname" className="block">
-                Họ và tên
-              </label>
-              <input
-                type="text"
-                id="fullname"
-                name="fullname"
-                size={20}
-                required
-                className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                size={20}
-                className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
-              />
-            </div>
-          </section>
-          <section className="space-y-2">
-            <h2>Đề bài</h2>
-            <p>
-              Link đề bài:{' '}
-              <a
-                href={data.source}
-                target="_blank"
-                className="text-sky-500 hover:underline hover:decoration-dashed hover:underline-offset-4"
-              >
-                {title}
-              </a>
-            </p>
-          </section>
-          {data.reading.length > 0 ? (
-            <ReadingSection starts={data.reading} />
-          ) : null}
-          {data.has_writing ? <WritingSection /> : null}
-          <div className="flex flex-row justify-center">
+      <section className="flex flex-col items-stretch space-y-4">
+        <section className="space-y-2">
+          <h2>Thông tin</h2>
+          <div className="space-y-1">
+            <label htmlFor="fullname" className="block">
+              Họ và tên
+            </label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              size={20}
+              form="test-form"
+              required
+              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
+            />
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="email" className="block">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              size={20}
+              form="test-form"
+              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
+            />
+          </div>
+        </section>
+        <section className="space-y-2">
+          <h2>Đề bài</h2>
+          <p>
+            Link đề bài:{' '}
+            <a
+              href={data.source}
+              target="_blank"
+              className="text-sky-500 hover:underline hover:decoration-dashed hover:underline-offset-4"
+            >
+              {title}
+            </a>
+          </p>
+        </section>
+        {data.reading.length > 0 ? (
+          <ReadingSection starts={data.reading} />
+        ) : null}
+        {data.has_writing ? <WritingSection /> : null}
+        <div className="flex flex-row justify-center">
+          <form onSubmit={submitForm} id="test-form">
             <button
               type="submit"
-              className="my-4 bg-yellow-400 border-2 border-yellow-400 hover:bg-zinc-50 font-bold rounded px-4 py-2 text-center"
+              className="bg-yellow-400 border-2 border-yellow-400 hover:bg-zinc-50 font-bold rounded px-4 py-2 text-center"
             >
               NỘP BÀI
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </section>
     </article>
   )

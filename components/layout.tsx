@@ -63,7 +63,7 @@ export default function Layout({ children }) {
       <main className="grow flex flex-col items-stretch w-3/5 m-auto">
         {children}
       </main>
-      <footer className="text-center p-4 whitespace-nowrap">
+      <footer className="text-center mt-8 p-4 whitespace-nowrap">
         <span>© Future Perfect Tutoring</span>
       </footer>
     </div>
