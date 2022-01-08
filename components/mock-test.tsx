@@ -40,7 +40,7 @@ const MultipleChoiceQuestion = ({
           value={k}
           id={id}
           form="test-form"
-          className="appearance-none w-4 h-4 rounded-full bg-zinc-50 border-2 border-zinc-400 hover:outline hover:outline-4 hover:outline-slate-200 checked:bg-amber-400 checked:border-amber-400 checked:ring-2 checked:ring-inset checked:ring-zinc-50"
+          className="appearance-none w-4 h-4 rounded-full bg-zinc-50 border-2 border-zinc-300 hover:outline hover:outline-4 hover:outline-slate-200 checked:bg-amber-400 checked:border-amber-400 checked:ring-2 checked:ring-inset checked:ring-zinc-50"
         />
       </div>
     )
@@ -62,7 +62,7 @@ const Passage = ({ section, num, first, last }: PassageProps) => {
   return (
     <fieldset
       key={`${section}.Passage ${num}`}
-      className="my-2 border-2 border-zinc-200 p-2 rounded-md"
+      className="my-2 border-2 border-zinc-300 p-2 rounded-md"
     >
       <legend className="font-bold">Passage {num}</legend>
       {questions}
@@ -172,7 +172,7 @@ export function TestPost({ title, date, data }: Post) {
       </Head>
       <h1 className="text-3xl font-bold mt-8">{title}</h1>
       <time dateTime={date}>{date}</time>
-      <section className="flex flex-col items-stretch space-y-4">
+      <section className="flex flex-col items-stretch mt-4 space-y-4">
         <section className="space-y-2">
           <h2>Thông tin</h2>
           <div className="space-y-1">
@@ -186,7 +186,7 @@ export function TestPost({ title, date, data }: Post) {
               size={20}
               form="test-form"
               required
-              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
+              className="bg-zinc-50 border-2 border-zinc-300 rounded-md block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-1 focus:ring-amber-400"
             />
           </div>
           <div className="space-y-1">
@@ -199,7 +199,7 @@ export function TestPost({ title, date, data }: Post) {
               name="email"
               size={20}
               form="test-form"
-              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
+              className="bg-zinc-50 border-2 border-zinc-300 rounded-md block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-1 focus:ring-amber-400"
             />
           </div>
         </section>
@@ -210,6 +210,7 @@ export function TestPost({ title, date, data }: Post) {
             <a
               href={data.source}
               target="_blank"
+              rel="noreferrer"
               className="text-sky-500 hover:underline hover:decoration-dashed hover:underline-offset-4"
             >
               {title}
@@ -243,9 +244,9 @@ export function TestPost({ title, date, data }: Post) {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
                   d="M5 13l4 4L19 7"
                 ></path>
               </svg>
