@@ -2,6 +2,7 @@ import { BaseSyntheticEvent } from 'react'
 import range from '../lib/utils'
 import Head from 'next/head'
 import { Post } from '../lib/types/post'
+import React from 'react'
 
 type Section = 'R' | 'W' | 'M(NC)' | 'M(CA)'
 
@@ -39,7 +40,7 @@ const MultipleChoiceQuestion = ({
           value={k}
           id={id}
           form="test-form"
-          className="appearance-none w-4 h-4 rounded-full bg-zinc-50 border border-zinc-400 checked:bg-amber-400 checked:border-amber-400"
+          className="appearance-none w-4 h-4 rounded-full bg-zinc-50 border-2 border-zinc-400 hover:outline hover:outline-4 hover:outline-slate-200 checked:bg-amber-400 checked:border-amber-400 checked:ring-2 checked:ring-inset checked:ring-zinc-50"
         />
       </div>
     )
@@ -106,10 +107,33 @@ const WritingSection = () => {
   )
 }
 
+const Dialog = ({ isOpen, children }) => {
+  const display = isOpen ? '' : 'hidden'
+  return (
+    <div
+      className={`fixed ${display} inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center`}
+      id="my-modal"
+    >
+      {children}
+    </div>
+  )
+}
+
 export function TestPost({ title, date, data }: Post) {
+  const [modalOpen, setModalOpen] = React.useState(false)
+
+  const openModal = () => {
+    setModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setModalOpen(false)
+  }
+
   const questions = range(1, 53, 1)
     .map((q) => `R.${q}`)
     .concat(range(1, 45, 1).map((q) => `W.${q}`))
+
   const submitForm = async (event: BaseSyntheticEvent) => {
     event.preventDefault()
 
@@ -136,12 +160,13 @@ export function TestPost({ title, date, data }: Post) {
       },
       method: 'POST',
     })
-    const result = await res.json()
-    console.log(result)
+    if (res.status === 200) {
+      openModal()
+    }
   }
 
   return (
-    <article className="space-y-4">
+    <article>
       <Head>
         <title>{`${title} | Future Perfect`}</title>
       </Head>
@@ -199,13 +224,49 @@ export function TestPost({ title, date, data }: Post) {
           <form onSubmit={submitForm} id="test-form">
             <button
               type="submit"
-              className="bg-yellow-400 border-2 border-yellow-400 hover:bg-zinc-50 font-bold rounded px-4 py-2 text-center"
+              className="w-32 py-2 bg-yellow-400 rounded-md text-zinc-50 text-center font-bold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-300"
             >
               NỘP BÀI
             </button>
           </form>
         </div>
       </section>
+      <Dialog isOpen={modalOpen}>
+        <div className="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="mt-3 text-center space-y-2">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-200">
+              <svg
+                className="h-6 w-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Hoàn tất
+            </h3>
+            <p className="text-sm text-gray-500">
+              Bài làm của bạn đã được ghi nhận.
+            </p>
+            <div className="items-center px-4 py-3">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
+              >
+                Đóng cửa sổ này
+              </button>
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </article>
   )
 }

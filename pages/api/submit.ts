@@ -16,7 +16,7 @@ export default async function handler(
       throw new Error(`No ${varName} environment variable set`)
     }
   }
-
+  console.log(req)
   const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID)
 
   await doc.useServiceAccountAuth({
@@ -28,6 +28,5 @@ export default async function handler(
   const sheet = doc.sheetsByIndex[req.body.id - 1]
 
   await sheet.addRow(req.body.form)
-  console.log(req)
-  res.status(200).json({ result: 'Hello' })
+  res.status(200).json({ result: 'Success' })
 }
