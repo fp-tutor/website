@@ -174,7 +174,7 @@ export function MockTest({ index, reading, has_writing }: MockTestProps) {
               id="email"
               name="email"
               size={20}
-              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-0 focus:ring focus:ring-amber-400"
+              className="bg-zinc-50 border border-zinc-400 rounded block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-amber-400"
             />
           </div>
         </section>

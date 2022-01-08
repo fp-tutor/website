@@ -7,15 +7,15 @@ const AboutPage = () => {
       <Head>
         <title>About | Future Perfect</title>
       </Head>
-      <article className="max-w-3xl m-4 space-y-2">
+      <article className="space-y-2">
         <h1 className="text-3xl font-bold my-4">Future Perfect</h1>
-        <p>
+        <p className="text-justify">
           <span className="font-bold">Future Perfect</span> là tổ chức giáo dục
           cung cấp các lớp học, luyện thi chuẩn hóa hiệu quả và chia sẻ kinh
           nghiệm, kỹ năng tự học tiếng anh giúp học viên Việt Nam theo đuổi định
           hướng tương lai.
         </p>
-        <p>
+        <p className="text-justify">
           Ra đời với mong muốn mang lại các khóa học luyện thi chứng chỉ hiệu
           quả, tiết kiệm, chúng mình sẽ là người đồng hành tâm huyết cùng các
           bạn trên hành trình chinh phục các kì thi không hề dễ dàng sắp tới. Dù
@@ -23,7 +23,7 @@ const AboutPage = () => {
           <span className="font-bold">Future Perfect</span> chắc chắn sẽ không
           làm bạn thất vọng!
         </p>
-        <p>
+        <p className="text-justify">
           Từ niềm tin về sức mạnh của giáo dục, cái tên{' '}
           <span className="font-bold">Future Perfect</span> gợi lên sự quyết tâm
           trong mỗi chúng ta trên con đường học vấn và chinh phục tương lai. Với
@@ -31,7 +31,7 @@ const AboutPage = () => {
           các bạn học sinh thấy được sự tiến bộ từng ngày thông qua những phương
           pháp học chủ động và hứng thú.
         </p>
-        <p>
+        <p className="text-justify">
           Khi những kì thi quan trọng ngày càng tới gần,{' '}
           <span className="font-bold">Future Perfect</span> kỳ vọng sẽ là sự
           giúp đỡ bạn cần để đạt được kết quả mơ ước. Chúng mình sẽ mở các lớp
