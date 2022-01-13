@@ -84,7 +84,9 @@ const ReadingSection = ({ starts }: ReadingSectionProps) => {
   return (
     <section>
       <h2>Reading</h2>
-      <div className="flex flex-row flex-wrap justify-evenly">{passages}</div>
+      <div className="flex flex-row flex-wrap justify-evenly space-x-2">
+        {passages}
+      </div>
     </section>
   )
 }
@@ -121,6 +123,7 @@ const Dialog = ({ isOpen, children }) => {
 
 export function TestPost({ title, date, data }: Post) {
   const [modalOpen, setModalOpen] = React.useState(false)
+  const [loading, setLoading] = React.useState(false)
 
   const openModal = () => {
     setModalOpen(true)
@@ -137,6 +140,8 @@ export function TestPost({ title, date, data }: Post) {
   const submitForm = async (event: BaseSyntheticEvent) => {
     event.preventDefault()
 
+    setLoading(true)
+
     const answers = Object.fromEntries(
       questions
         .filter((q) => event.target[q] !== undefined)
@@ -147,7 +152,6 @@ export function TestPost({ title, date, data }: Post) {
       id: data.index,
       form: {
         'Họ và tên': event.target.fullname.value,
-        Email: event.target.email.value,
         ...answers,
       },
     }
@@ -161,6 +165,7 @@ export function TestPost({ title, date, data }: Post) {
       method: 'POST',
     })
     if (res.status === 200) {
+      setLoading(false)
       openModal()
     }
   }
@@ -189,19 +194,6 @@ export function TestPost({ title, date, data }: Post) {
               className="bg-zinc-50 border-2 border-zinc-300 rounded-md block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-1 focus:ring-amber-400"
             />
           </div>
-          <div className="space-y-1">
-            <label htmlFor="email" className="block">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              size={20}
-              form="test-form"
-              className="bg-zinc-50 border-2 border-zinc-300 rounded-md block w-full p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-1 focus:ring-amber-400"
-            />
-          </div>
         </section>
         <section className="space-y-2">
           <h2>Đề bài</h2>
@@ -225,9 +217,35 @@ export function TestPost({ title, date, data }: Post) {
           <form onSubmit={submitForm} id="test-form">
             <button
               type="submit"
-              className="w-32 py-2 bg-yellow-400 rounded-md text-zinc-50 text-center font-bold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+              className="w-32 py-2 inline-flex justify-center	items-center bg-yellow-400 rounded-md text-zinc-50 font-bold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-300"
             >
-              NỘP BÀI
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Xử lý...
+                </>
+              ) : (
+                'Nộp bài'
+              )}
             </button>
           </form>
         </div>
