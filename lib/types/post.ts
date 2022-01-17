@@ -4,7 +4,8 @@ interface TestData {
     index: number
     source: string
     reading: number[]
-    has_writing: boolean
+    writing: boolean
+    math: boolean
   }
 }
 

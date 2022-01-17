@@ -5,6 +5,7 @@
     "index": 2,
     "source": "https://drive.google.com/file/d/1IUJ_fUfVa9x07AjS5cgzMy9d29t9oD5F/view",
     "reading": [1, 11, 22, 32, 42],
-    "has_writing": false
+    "writing": false,
+    "math": false
   }
 }

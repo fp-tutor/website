@@ -1,21 +1,18 @@
 import { BaseSyntheticEvent } from 'react'
-import range from '../lib/utils'
 import Head from 'next/head'
-import { Post } from '../lib/types/post'
 import React from 'react'
 
-type Section = 'R' | 'W' | 'M(NC)' | 'M(CA)'
+import { Post } from '../lib/types/post'
+import range from '../lib/utils'
 
 interface MultipleChoiceQuestionProps {
-  section: Section
+  section: 'R' | 'W' | 'M(NC)' | 'M(CA)'
   num: number
 }
 
-interface PassageProps {
-  section: 'R' | 'W'
+interface GridInQuestionProps {
+  section: 'M(NC)' | 'M(CA)'
   num: number
-  first: number
-  last: number
 }
 
 interface ReadingSectionProps {
@@ -46,8 +43,8 @@ const MultipleChoiceQuestion = ({
     )
   })
   return (
-    <div className="question w-32 flex flex-row justify-around my-2">
-      <div className="flex flex-col justify-center w-4 text-right">
+    <div className="question h-12 w-32 flex justify-between items-center">
+      <div className="w-6 text-right">
         <p>{num}</p>
       </div>
       {ans_list}
@@ -55,57 +52,91 @@ const MultipleChoiceQuestion = ({
   )
 }
 
-const Passage = ({ section, num, first, last }: PassageProps) => {
-  const questions = range(first, last + 1, 1).map((i) => (
-    <MultipleChoiceQuestion section={section} num={i} key={`${num}.${i}`} />
-  ))
+const GridInQuestion = ({ section, num }: GridInQuestionProps) => {
+  const key = `${section}.${num}`
   return (
-    <fieldset
-      key={`${section}.Passage ${num}`}
-      className="my-2 border-2 border-zinc-300 p-2 rounded-md"
-    >
-      <legend className="font-bold">Passage {num}</legend>
-      {questions}
+    <div className="question h-12 w-32 flex justify-between items-center">
+      <div className="w-6 text-right">
+        <label htmlFor={key}>{num}</label>
+      </div>
+      <input
+        type="text"
+        id={key}
+        name={key}
+        maxLength={4}
+        className="w-24 h-6 bg-zinc-50 border-2 border-zinc-300 rounded-md block p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-1 focus:ring-amber-400"
+      />
+    </div>
+  )
+}
+
+const Fieldset = ({ legend, children }) => {
+  return (
+    <fieldset className="flex flex-col items-center p-2 border-2 border-zinc-300 rounded-md">
+      <legend className="font-bold">{legend}</legend>
+      {children}
     </fieldset>
+  )
+}
+
+const SectionView = ({ name, children }) => {
+  return (
+    <section>
+      <h2>{name}</h2>
+      <div className="flex flex-wrap justify-center items-start gap-4">
+        {children}
+      </div>
+    </section>
   )
 }
 
 const ReadingSection = ({ starts }: ReadingSectionProps) => {
   const r_starts = [...starts, 53]
   const passages = [1, 2, 3, 4, 5].map((p) => (
-    <Passage
-      key={`R.${p}`}
-      section="R"
-      num={p}
-      first={r_starts[p - 1]}
-      last={r_starts[p] - 1}
-    />
+    <Fieldset key={`R.${p}`} legend={`Passage ${p}`}>
+      {range(r_starts[p - 1], r_starts[p], 1).map((i) => (
+        <MultipleChoiceQuestion section="R" num={i} key={`${p}.${i}`} />
+      ))}
+    </Fieldset>
   ))
-  return (
-    <section>
-      <h2>Reading</h2>
-      <div className="flex flex-row flex-wrap justify-evenly space-x-2">
-        {passages}
-      </div>
-    </section>
-  )
+  return <SectionView name="Reading">{passages}</SectionView>
 }
 
 const WritingSection = () => {
   const passages = [1, 2, 3, 4].map((p) => (
-    <Passage
-      key={`W.${p}`}
-      section="W"
-      num={p}
-      first={p * 11 - 10}
-      last={p * 11}
-    />
+    <Fieldset key={`W.${p}`} legend={`Passage ${p}`}>
+      {range(p * 11 - 10, p * 11 + 1, 1).map((i) => (
+        <MultipleChoiceQuestion section="W" num={i} key={`${p}.${i}`} />
+      ))}
+    </Fieldset>
   ))
+  return <SectionView name="Writing">{passages}</SectionView>
+}
+
+const MathSection = () => {
+  const ncQuestions = range(1, 16, 1)
+    .map((q) => (
+      <MultipleChoiceQuestion section="M(NC)" num={q} key={`M(NC).${q}`} />
+    ))
+    .concat(
+      range(16, 21, 1).map((q) => (
+        <GridInQuestion section="M(NC)" num={q} key={`M(NC).${q}`} />
+      ))
+    )
+  const caQuestions = range(1, 31, 1)
+    .map((q) => (
+      <MultipleChoiceQuestion section="M(CA)" num={q} key={`M(NC).${q}`} />
+    ))
+    .concat(
+      range(31, 39, 1).map((q) => (
+        <GridInQuestion section="M(CA)" num={q} key={`M(NC).${q}`} />
+      ))
+    )
   return (
-    <section className="space-y-2">
-      <h2>Writing</h2>
-      <div className="flex flex-row flex-wrap justify-evenly">{passages}</div>
-    </section>
+    <SectionView name="Math">
+      <Fieldset legend="No calculator">{ncQuestions}</Fieldset>
+      <Fieldset legend="Calculator OK">{caQuestions}</Fieldset>
+    </SectionView>
   )
 }
 
@@ -212,7 +243,8 @@ export function TestPost({ title, date, data }: Post) {
         {data.reading.length > 0 ? (
           <ReadingSection starts={data.reading} />
         ) : null}
-        {data.has_writing ? <WritingSection /> : null}
+        {data.writing ? <WritingSection /> : null}
+        {data.math ? <MathSection /> : null}
         <div className="flex flex-row justify-center">
           <form onSubmit={submitForm} id="test-form">
             <button
