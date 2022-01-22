@@ -12,6 +12,7 @@ interface TestData {
 interface PostCommon {
   title: string
   date: string
+  description: string | null
   data: string
 }
 

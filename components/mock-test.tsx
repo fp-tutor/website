@@ -4,6 +4,7 @@ import React from 'react'
 
 import { Post } from '../lib/types/post'
 import range from '../lib/utils'
+import PostView from './postView'
 
 interface MultipleChoiceQuestionProps {
   section: 'R' | 'W' | 'M(NC)' | 'M(CA)'
@@ -153,7 +154,7 @@ const Dialog = ({ isOpen, children }) => {
   )
 }
 
-export function TestPost({ title, date, data }: Post) {
+export function TestPost(post: Post) {
   const [modalOpen, setModalOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(false)
 
@@ -182,7 +183,7 @@ export function TestPost({ title, date, data }: Post) {
     )
 
     const body = {
-      id: data.index,
+      id: post.data.index,
       form: {
         'Họ và tên': event.target.fullname.value,
         ...answers,
@@ -204,12 +205,7 @@ export function TestPost({ title, date, data }: Post) {
   }
 
   return (
-    <article>
-      <Head>
-        <title>{`${title} | Future Perfect`}</title>
-      </Head>
-      <h1 className="text-3xl font-bold mt-8">{title}</h1>
-      <time dateTime={date}>{date}</time>
+    <PostView post={post}>
       <section className="flex flex-col items-stretch mt-4 space-y-4">
         <section className="space-y-2">
           <h2>Thông tin</h2>
@@ -233,20 +229,20 @@ export function TestPost({ title, date, data }: Post) {
           <p>
             Link đề bài:{' '}
             <a
-              href={data.source}
+              href={post.data.source}
               target="_blank"
               rel="noreferrer"
               className="text-sky-500 hover:underline hover:decoration-dashed hover:underline-offset-4"
             >
-              {title}
+              {post.title}
             </a>
           </p>
         </section>
-        {data.reading.length > 0 ? (
-          <ReadingSection starts={data.reading} />
+        {post.data.reading.length > 0 ? (
+          <ReadingSection starts={post.data.reading} />
         ) : null}
-        {data.writing ? <WritingSection /> : null}
-        {data.math ? <MathSection /> : null}
+        {post.data.writing ? <WritingSection /> : null}
+        {post.data.math ? <MathSection /> : null}
         <div className="flex flex-row justify-center">
           <form onSubmit={submitForm} id="test-form">
             <button
@@ -320,6 +316,6 @@ export function TestPost({ title, date, data }: Post) {
           </div>
         </div>
       </Dialog>
-    </article>
+    </PostView>
   )
 }
