@@ -62,6 +62,7 @@ const GridInQuestion = ({ section, num }: GridInQuestionProps) => {
       <input
         type="text"
         id={key}
+        form="test-form"
         name={key}
         maxLength={4}
         className="w-24 h-6 bg-zinc-50 border-2 border-zinc-300 rounded-md block p-2 focus:outline-none focus:border-amber-400 focus:ring focus:ring-1 focus:ring-amber-400"
@@ -164,9 +165,10 @@ export function TestPost({ title, date, data }: Post) {
     setModalOpen(false)
   }
 
-  const questions = range(1, 53, 1)
-    .map((q) => `R.${q}`)
+  const questions = range(1, 53, 1).map((q) => `R.${q}`)
     .concat(range(1, 45, 1).map((q) => `W.${q}`))
+    .concat(range(1, 20, 1).map((q) => `M(NC).${q}`))
+    .concat(range(1, 38, 1).map((q) => `M(CA).${q}`))
 
   const submitForm = async (event: BaseSyntheticEvent) => {
     event.preventDefault()
