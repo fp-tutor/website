@@ -1,5 +1,5 @@
 import Layout from '../../components/layout'
-import { TestPost } from '../../components/mock-test'
+import { TestPost } from '../../components/mockTest'
 import { Post } from '../../lib/types/post'
 import { getAllPostIds, getPostData } from '../../lib/posts'
 

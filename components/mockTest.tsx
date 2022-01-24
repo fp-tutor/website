@@ -1,5 +1,4 @@
 import { BaseSyntheticEvent } from 'react'
-import Head from 'next/head'
 import React from 'react'
 
 import { Post } from '../lib/types/post'
@@ -168,8 +167,8 @@ export function TestPost(post: Post) {
 
   const questions = range(1, 53, 1).map((q) => `R.${q}`)
     .concat(range(1, 45, 1).map((q) => `W.${q}`))
-    .concat(range(1, 20, 1).map((q) => `M(NC).${q}`))
-    .concat(range(1, 38, 1).map((q) => `M(CA).${q}`))
+    .concat(range(1, 21, 1).map((q) => `M(NC).${q}`))
+    .concat(range(1, 39, 1).map((q) => `M(CA).${q}`))
 
   const submitForm = async (event: BaseSyntheticEvent) => {
     event.preventDefault()
