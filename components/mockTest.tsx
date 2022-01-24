@@ -247,6 +247,7 @@ export function TestPost(post: Post) {
             <button
               type="submit"
               className="w-32 py-2 inline-flex justify-center	items-center bg-yellow-400 rounded-md text-zinc-50 font-bold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+              disabled={loading}
             >
               {loading ? (
                 <>
